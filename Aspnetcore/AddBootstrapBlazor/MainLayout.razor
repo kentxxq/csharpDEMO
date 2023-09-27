@@ -1,0 +1,29 @@
+﻿@inherits LayoutComponentBase
+
+<Layout IsPage="true" SideWidth="0" IsFixedHeader="true">
+    <Header>
+        header示例
+    </Header>
+    <Side>
+        <div class="side" style="margin-top:8px;">
+            <Menu Items="@_iconSideMenuItems" IsVertical="true"></Menu>
+        </div>
+    </Side>
+    <Main>
+        <div style="padding: 1rem;">
+            @Body
+        </div>
+    </Main>
+</Layout>
+
+
+@code {
+
+    private readonly List<MenuItem> _iconSideMenuItems = new()
+    {
+        new MenuItem("欢迎页", "/", "fas fa-certificate"),
+        new MenuItem("路由1", "/r1", "fas fa-certificate"),
+        new MenuItem("路由2", "/r2", "fas fa-user-secret")
+    };
+
+}

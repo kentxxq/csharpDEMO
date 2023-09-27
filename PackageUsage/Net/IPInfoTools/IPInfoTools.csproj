@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="IP2Region.Net" Version="2.0.1" />
+    </ItemGroup>
+
+
+    <PropertyGroup>
+        <ip2regionDB>https://ghproxy.com/https://github.com/lionsoul2014/ip2region/blob/master/data/ip2region.xdb</ip2regionDB>
+    </PropertyGroup>
+
+    <Target Name="DownloadContentFiles" BeforeTargets="Build" Condition="!Exists('$(OutputPath)/ip2region.xdb')">
+        <DownloadFile
+                SourceUrl="$(ip2regionDB)"
+                DestinationFolder="$(OutputPath)">
+            <Output TaskParameter="DownloadedFile" ItemName="Content" />
+        </DownloadFile>
+    </Target>
+
+</Project>
