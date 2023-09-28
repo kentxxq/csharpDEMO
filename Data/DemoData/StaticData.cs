@@ -17,7 +17,8 @@ public static class StaticData
     [Display(Name = "示例Person-嵌套", Description = "使用了Models-Person")]
     public static readonly Person DemoPerson = new()
     {
-        Name = "ken", Age = 1, PersonHead = new Head { Height = 50, Width = 50 }, PersonShoes = new List<Shoes>
+        Name = "ken", Birthday = new DateTime(1234, 5, 6), Age = 1, PersonHead = new Head { Height = 50, Width = 50 },
+        PersonShoes = new List<Shoes>
         {
             new() { ShoesColor = Color.Blue, ShoesName = "蓝色" },
             new() { ShoesColor = Color.Red, ShoesName = "红色" }
