@@ -7,7 +7,7 @@ namespace DemoData.Models;
 public class Shoes
 {
     [Display(Name = "鞋名", Description = "鞋子的名字")]
-    public string ShoesName { get; set; } = null!;
+    public string ShoesName { get; set; } = string.Empty;
 
     [Display(Name = "鞋颜色", Description = "鞋子的颜色")]
     public Color ShoesColor { get; set; }
