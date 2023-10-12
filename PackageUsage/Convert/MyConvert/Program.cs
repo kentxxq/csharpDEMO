@@ -62,7 +62,9 @@ var opt = new JsonSerializerOptions
     Converters =
     {
         new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
-    }
+    },
+    // 从源生成中获取类型转换信息
+    TypeInfoResolver = JsonContext.Default
 };
 // 转字符串
 var str = JsonSerializer.Serialize(StaticData.DemoPerson, opt);
@@ -76,7 +78,7 @@ var d1 = JsonSerializer.Deserialize<Person>(str);
 #region JsonNode
 
 var jNode = JsonNode.Parse(str)!;
-var name = jNode["name"]!.GetValue<string>();
+var name = jNode["Name"]!.GetValue<string>();
 Console.WriteLine(name);
 // 修改
 jNode["name"] = "kent";
@@ -91,13 +93,36 @@ jObject.Remove("name");
 #region JsonDocument
 
 using var jDoc = JsonDocument.Parse(str);
-name = jDoc.RootElement.GetProperty("name").Deserialize<string>();
+name = jDoc.RootElement.GetProperty("Name").Deserialize<string>();
 Console.WriteLine(name);
 
 #endregion
 
 // Utf8JsonWriter和Utf8JsonReader
 Utf8Json.TestUtf8Json();
+
+
+// 源生成
+
+var s1 = JsonSerializer.Serialize(StaticData.DemoPerson, JsonContext.Default.Person);
+var o1 = JsonSerializer.Deserialize(s1, JsonContext.Default.Person);
+var s2 = JsonSerializer.Serialize(StaticData.DemoUser, JsonContext.Default.User);
+Console.WriteLine(s1);
+Console.WriteLine(s2);
+
+
+// 不标准的json
+// 不完整的json,缺少的字段默认值
+var j1 = """{"Name": "ken"}""";
+var j11 = JsonSerializer.Deserialize(j1, JsonContext.Default.Person);
+// 带null的json
+// age为null报错.
+// name为null则会传递到对象里,即使Name不允许为null值
+var j2 = """{"Name": null,"Age":4}""";
+var j22 = JsonSerializer.Deserialize(j2, JsonContext.Default.Person);
+// 正常默认值
+var j3 = "{}";
+var j33 = JsonSerializer.Deserialize(j3, JsonContext.Default.Person);
 
 #endregion
 

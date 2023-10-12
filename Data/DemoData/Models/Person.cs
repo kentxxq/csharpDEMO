@@ -6,7 +6,7 @@ namespace DemoData.Models;
 public class Person
 {
     [Display(Name = "人名", Description = "人的名字")]
-    public string Name { get; set; } = null!;
+    public string Name { get; set; } = string.Empty;
 
     [Display(Name = "性别", Description = "人的性别")]
     public Sex SexType { get; set; }
