@@ -13,10 +13,10 @@ builder.Services.AddMyOpenTelemetry();
 // 日志
 builder.Logging.AddOpenTelemetry(lo =>
 {
-    lo.AddOtlpExporter(oe =>
+    lo.AddOtlpExporter((options) =>
     {
-        oe.Endpoint = new Uri("http://192.168.31.210:4317");
-        oe.Protocol = OtlpExportProtocol.Grpc;
+        options.Endpoint = new Uri("http://192.168.31.210:4317");
+        options.Protocol = OtlpExportProtocol.Grpc;
     });
 });
 
