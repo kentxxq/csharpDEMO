@@ -28,8 +28,8 @@ using MyConvert;
 
 #region mapper对象映射
 
-// Console.WriteLine("测试mapper映射");
-// var userSO = MyMapper.UserToUserSO(StaticData.DemoUser);
+Console.WriteLine("测试mapper映射");
+var userSO = MyMapper.UserToUserSO(StaticData.DemoUser);
 
 #endregion
 
