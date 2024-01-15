@@ -1,10 +1,11 @@
 using Serilog;
-using Serilog.Logfmt;
 
 var builder = WebApplication.CreateBuilder(args);
 
+Log.ForContext("Project", nameof(AddSerilog));
 Log.Logger = new LoggerConfiguration()
     // .MinimumLevel.Override("xx",Serilog.Events.LogEventLevel.Warning)
+    .Enrich.WithProperty("AppName",ThisAssembly.Project.AssemblyName)
     .Enrich.When(logEvent=>!logEvent.Properties.ContainsKey("SourceContext"),enrichmentConfig=>enrichmentConfig.WithProperty("SourceContext","SourceContext"))
     .Enrich.When(logEvent=>!logEvent.Properties.ContainsKey("ThreadName"),enrichmentConfig=>enrichmentConfig.WithProperty("ThreadName","ThreadName"))
     .ReadFrom.Configuration(builder.Configuration)
