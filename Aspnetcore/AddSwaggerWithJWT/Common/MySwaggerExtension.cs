@@ -1,6 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
 
-namespace AddSwaggerWithJWT;
+namespace AddSwaggerWithJWT.Common;
 
 /// <summary>
 /// swagger-拓展方法
@@ -14,11 +14,13 @@ public static class MySwaggerExtension
     /// <returns></returns>
     public static IServiceCollection AddMySwagger(this IServiceCollection service)
     {
-        
+
         service.AddEndpointsApiExplorer();
         service.AddSwaggerGen(s =>
         {
-            s.SwaggerDoc("Examples", new OpenApiInfo { Title = "Examples", Version = "v1" });
+            // 创建一个 /swagger/v1/swagger.json 路径，controller里的groupname要和name一致。OpenApiInfo是让这个页面里写着 kentxxq.Kscheduler.webapi v1
+            s.SwaggerDoc("v1", new OpenApiInfo { Title = ThisAssembly.Project.AssemblyName, Version = "v1" });
+            s.SwaggerDoc("v2", new OpenApiInfo { Title = ThisAssembly.Project.AssemblyName, Version = "v2" });
 
             // JWT
             s.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
@@ -32,7 +34,7 @@ public static class MySwaggerExtension
                 In = ParameterLocation.Header,
                 Scheme = "bearer",
                 BearerFormat = "JWT",
-                Description = "JWT Authorization header using the Bearer scheme."
+                Description = "JWT授权(数据将在请求头中进行传输) 直接在下框中输入token即可"
             });
             s.AddSecurityRequirement(new OpenApiSecurityRequirement
             {

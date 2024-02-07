@@ -1,4 +1,4 @@
-﻿namespace AddSwaggerWithJWT;
+﻿namespace AddSwaggerWithJWT.Common;
 
 /// <summary>
 /// JWT工具

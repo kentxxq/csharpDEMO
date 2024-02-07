@@ -1,3 +1,4 @@
+using AddSwaggerWithJWT.Common;
 using AddSwaggerWithJWT.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -5,10 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace AddSwaggerWithJWT.Controllers;
 
 /// <inheritdoc />
-[ApiExplorerSettings(GroupName = "Examples")]
+[ApiExplorerSettings(GroupName = "v1")]
 [ApiController]
-[Route("api/[controller]/[action]")]
-[Authorize]
+[Route("[controller]/[action]")]
 public class WeatherForecastController : ControllerBase
 {
     private static readonly string[] Summaries = new[] {

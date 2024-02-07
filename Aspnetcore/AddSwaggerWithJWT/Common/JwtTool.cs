@@ -4,7 +4,7 @@ using IdentityModel;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.IdentityModel.Tokens;
 
-namespace AddSwaggerWithJWT;
+namespace AddSwaggerWithJWT.Common;
 
 public static class JwtTool
 {

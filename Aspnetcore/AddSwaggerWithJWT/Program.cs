@@ -1,4 +1,5 @@
 using AddSwaggerWithJWT;
+using AddSwaggerWithJWT.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,10 +62,27 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(u => { u.SwaggerEndpoint("/swagger/Examples/swagger.json", "Examples"); });
-}
+    app.UseSwagger(options =>
+    {
+        options.SerializeAsV2 = true;
+    });
+    app.UseSwaggerUI(u =>
+    {
+        // 拦截 /swagger/v1/swagger.json 到 SwaggerDoc的v1
+        u.SwaggerEndpoint($"/swagger/v1/swagger.json", "v1");
+        // 右上角会有2个选项
+        u.SwaggerEndpoint($"/swagger/v2/swagger.json", "v2");
+    });}
 
-app.MapControllers();
+// 加上一个前缀
+app.UsePathBase(new PathString($"/{ThisAssembly.Project.AssemblyName}"));
+
+// 认证
+app.UseAuthentication();
+// 授权
+app.UseAuthorization();
+
+// 全局添加需要验证
+app.MapControllers().RequireAuthorization();
 
 app.Run();
