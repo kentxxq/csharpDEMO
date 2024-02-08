@@ -1,6 +1,7 @@
 # only record change
 
 root = true
+
 [*]
 # space instead tab
 indent_style = space
