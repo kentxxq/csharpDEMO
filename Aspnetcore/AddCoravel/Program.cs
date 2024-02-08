@@ -12,12 +12,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScheduler();
-
-
-var app = builder.Build();
+builder.Services.AddQueue();
 
 // 注入它！！！
 builder.Services.AddTransient<Hi>();
+
+var app = builder.Build();
 
 var provider = app.Services;
 provider.UseScheduler(scheduler =>
@@ -25,7 +25,7 @@ provider.UseScheduler(scheduler =>
     scheduler.Schedule(() => { Console.WriteLine(DateTime.Now); })
         .EverySeconds(5);
     scheduler.Schedule<Hi>().EverySeconds(5);
-    
+
     scheduler.OnWorker(nameof(TaskWithDIAndParameter)); // 下面的任务在独立线程中执行
     scheduler.ScheduleWithParams<TaskWithDIAndParameter>("TaskWithDIAndParameter")
         .EverySecond()
