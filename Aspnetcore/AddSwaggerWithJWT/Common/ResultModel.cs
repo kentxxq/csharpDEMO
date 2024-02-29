@@ -1,4 +1,4 @@
-﻿namespace AddSwaggerWithJWT.Response;
+﻿namespace AddSwaggerWithJWT.Common;
 
 /// <summary>
 /// 统一返回模型

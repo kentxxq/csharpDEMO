@@ -1,5 +1,4 @@
 using AddSwaggerWithJWT.Common;
-using AddSwaggerWithJWT.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
