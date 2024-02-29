@@ -1,8 +1,7 @@
 ﻿using Serilog.Formatting;
-using Serilog.Formatting.Json;
 using Serilog.Logfmt;
 
-namespace AddSerilog;
+namespace AddSerilog.Common;
 
 public static class MyLogfmtFormatter
 {

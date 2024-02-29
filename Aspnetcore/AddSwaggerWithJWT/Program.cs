@@ -72,7 +72,8 @@ if (app.Environment.IsDevelopment())
         u.SwaggerEndpoint($"/swagger/v1/swagger.json", "v1");
         // 右上角会有2个选项
         u.SwaggerEndpoint($"/swagger/v2/swagger.json", "v2");
-    });}
+    });
+}
 
 // 加上一个前缀
 app.UsePathBase(new PathString($"/{ThisAssembly.Project.AssemblyName}"));
