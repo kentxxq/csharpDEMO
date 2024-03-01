@@ -2,7 +2,7 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Log.ForContext("Project", nameof(AddSerilog));
+Log.ForContext("Project", ThisAssembly.Project.AssemblyName);
 Log.Logger = new LoggerConfiguration()
     // .MinimumLevel.Override("xx",Serilog.Events.LogEventLevel.Warning)
     .Enrich.WithProperty("AppName",ThisAssembly.Project.AssemblyName)
