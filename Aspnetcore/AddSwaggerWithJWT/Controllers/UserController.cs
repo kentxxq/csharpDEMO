@@ -1,11 +1,16 @@
 using AddSwaggerWithJWT.Common;
 using AddSwaggerWithJWT.RO;
 using AddSwaggerWithJWT.SO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AddSwaggerWithJWT.Controllers;
 
+
 /// <summary>用户相关</summary>
+[ApiExplorerSettings(GroupName = "v1")]
+[ApiController]
+[Route("[controller]/[action]")]
 public class UserController : ControllerBase
 {
     private readonly JWTService _jwtService;
@@ -18,7 +23,8 @@ public class UserController : ControllerBase
         _jwtService = jwtService;
     }
 
-
+    [AllowAnonymous]
+    [HttpPost]
     public ResultModel<LoginSO> Login(LoginRO loginRO)
     {
         if (loginRO.Username != "admin" || loginRO.Password != "123456")
