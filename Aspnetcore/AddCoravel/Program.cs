@@ -27,7 +27,7 @@ provider.UseScheduler(scheduler =>
     scheduler.Schedule<Hi>().EverySeconds(5);
 
     scheduler.OnWorker(nameof(TaskWithDIAndParameter)); // 下面的任务在独立线程中执行
-    scheduler.ScheduleWithParams<TaskWithDIAndParameter>("TaskWithDIAndParameter")
+    scheduler.ScheduleWithParams<TaskWithDIAndParameter>("TaskWithDIAndParameter-我是参数")
         .EverySecond()
         .RunOnceAtStart() // 启动后运行一次，比如设置了cron的时候很有用
         .When(() => Task.FromResult(true)) // 触发条件
