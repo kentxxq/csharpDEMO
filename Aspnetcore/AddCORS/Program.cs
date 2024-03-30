@@ -18,9 +18,15 @@ if (builder.Environment.IsDevelopment())
             });
     });
 }
-    
+
 
 var app = builder.Build();
+
+// 跨域
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors("all");
+}
 
 app.MapControllers();
 
