@@ -9,6 +9,39 @@ namespace MyReflection;
 /// </summary>
 public static class GetAttrExtension
 {
+    public static List<EnumObject> EnumToEnumObject<T>(this Type enumType)where T : Enum
+    {
+        if (!enumType.IsEnum) throw new ArgumentException("必须是enum类型");
+        var enumList = new List<EnumObject>();
+        foreach (T enumValue in Enum.GetValues(enumType))
+        {
+            enumList.Add(new EnumObject
+            {
+                EnumKey = Convert.ToInt32(enumValue),
+                EnumName = enumValue.ToString(),
+                EnumDisplayName = enumValue.GetEnumDisplay()?.Name ?? string.Empty
+            });
+        }
+
+        return enumList;
+    }
+
+    public static List<EnumObject> EnumToEnumObject2<T>(this T enumType)where T : Enum
+    {
+        var enumList = new List<EnumObject>();
+        var t = enumType.GetType();
+        foreach (T enumValue in Enum.GetValues(t))
+        {
+            enumList.Add(new EnumObject
+            {
+                EnumKey = Convert.ToInt32(enumValue),
+                EnumName = enumValue.ToString(),
+                EnumDisplayName = enumValue.GetEnumDisplay()?.Name ?? string.Empty
+            });
+        }
+
+        return enumList;
+    }
 
     #region Display
 
@@ -145,5 +178,5 @@ public static class GetAttrExtension
     }
 
     #endregion
-    
+
 }
