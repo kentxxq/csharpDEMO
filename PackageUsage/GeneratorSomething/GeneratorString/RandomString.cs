@@ -15,7 +15,7 @@ public class RandomString
     ///<param name="useSpe">是否包含特殊字符，1=包含，默认为不包含</param>
     ///<param name="custom">要包含的自定义字符，直接输入要包含的字符列表</param>
     ///<returns>指定长度的随机字符串</returns>
-    public static string GetRandomString(int length, bool useNum, bool useLow, bool useUpp, bool useSpe, string custom)
+    public static string GetRandomString(int length, bool useNum, bool useLow, bool useUpp, bool useSpe = false, string custom="")
     {
         //var b = new byte[4];
         //new System.Security.Cryptography.RNGCryptoServiceProvider().GetBytes(b);
