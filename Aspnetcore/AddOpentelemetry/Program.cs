@@ -17,7 +17,7 @@ var app = builder.Build();
 // header添加TraceId
 app.Use(async (context, next) =>
 {
-    context.Response.Headers.Add("TraceId", Activity.Current?.TraceId.ToString());
+    context.Response.Headers.Append("TraceId", Activity.Current?.TraceId.ToString());
     await next();
 });
 

@@ -1,4 +1,5 @@
-﻿using OpenTelemetry;
+﻿using Microsoft.Extensions.Options;
+using OpenTelemetry;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
@@ -19,13 +20,18 @@ public static class MyOpenTelemetryExtension
     /// <returns></returns>
     public static WebApplicationBuilder AddMyOpenTelemetry(this WebApplicationBuilder builder)
     {
+        // 不要开代理!!!!!!
+        // 不要开代理!!!!!!
+        // 不要开代理!!!!!!
         _ocEndpoint = builder.Configuration["OC_Endpoint"] ??
                       throw new InvalidOperationException("必须配置open telemetry的collector地址");
 
         var openTelemetryBuilder = builder.Services.AddOpenTelemetry()
+            // .UseOtlpExporter(OtlpExportProtocol.Grpc,new Uri(_ocEndpoint))
             .ConfigureResource(resourceBuilder => resourceBuilder.AddService(AppName, serviceVersion: AppVersion));
 
-        AddLogging(builder);
+        // AddLogging(builder);
+        AddLogging(openTelemetryBuilder);
         AddMetrics(openTelemetryBuilder);
         AddTrace(openTelemetryBuilder);
 
@@ -34,20 +40,32 @@ public static class MyOpenTelemetryExtension
 
     /// <summary>添加logging</summary>
     /// <param name="builder"></param>
-    private static void AddLogging(WebApplicationBuilder builder)
+    // private static void AddLogging(WebApplicationBuilder builder)
+    // {
+    //     builder.Logging.AddOpenTelemetry(lo =>
+    //     {
+    //         // 包含attributes字段，里面有RequestUrl，ConnectionId等信息
+    //         lo.IncludeScopes = true;
+    //         // var resourceBuilder = ResourceBuilder.CreateDefault().AddService(AppName, serviceVersion: AppVersion);
+    //         // lo.SetResourceBuilder(resourceBuilder);
+    //         lo.AddOtlpExporter(options =>
+    //         {
+    //             options.Endpoint = new Uri(_ocEndpoint);
+    //             options.Protocol = OtlpExportProtocol.Grpc;
+    //         });
+    //     });
+    // }
+
+    private static void AddLogging(OpenTelemetryBuilder openTelemetryBuilder)
     {
-        builder.Logging.AddOpenTelemetry(lo =>
-        {
-            // 包含attributes字段，里面有RequestUrl，ConnectionId等信息
-            lo.IncludeScopes = true;
-            // var resourceBuilder = ResourceBuilder.CreateDefault().AddService(AppName, serviceVersion: AppVersion);
-            // lo.SetResourceBuilder(resourceBuilder);
-            lo.AddOtlpExporter(options =>
+        openTelemetryBuilder.WithLogging(builder => builder
+            // .AddConsoleExporter()
+            .AddOtlpExporter((options,logRecordExportProcessorOptions) =>
             {
                 options.Endpoint = new Uri(_ocEndpoint);
                 options.Protocol = OtlpExportProtocol.Grpc;
-            });
-        });
+            })
+        );
     }
 
     /// <summary>添加 metrics 指标数据</summary>
@@ -62,11 +80,6 @@ public static class MyOpenTelemetryExtension
                 // })
                 // debug用
                 .AddPrometheusExporter()
-                // .AddOtlpExporter(o =>
-                // {
-                //     o.Endpoint = new Uri("http://poc.mashibing.com:4317");
-                //     o.Protocol = OtlpExportProtocol.Grpc;
-                // })
                 .AddOtlpExporter((options, readerOptions) =>
                 {
                     options.Endpoint = new Uri(_ocEndpoint);
