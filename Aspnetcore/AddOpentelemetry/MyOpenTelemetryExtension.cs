@@ -88,6 +88,7 @@ public static class MyOpenTelemetryExtension
                     readerOptions.PeriodicExportingMetricReaderOptions.ExportIntervalMilliseconds = 1000;
                 })
                 .AddMeter(AppName)
+                .AddProcessInstrumentation()
                 .AddHttpClientInstrumentation()
                 .AddAspNetCoreInstrumentation()
                 .AddRuntimeInstrumentation()
