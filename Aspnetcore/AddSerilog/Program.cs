@@ -1,21 +1,20 @@
+using AddSerilog;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Log.ForContext("Project", ThisAssembly.Project.AssemblyName);
 Log.Logger = new LoggerConfiguration()
-    // .MinimumLevel.Override("xx",Serilog.Events.LogEventLevel.Warning)
-    .Enrich.WithProperty("AppName",ThisAssembly.Project.AssemblyName)
-    .Enrich.When(logEvent=>!logEvent.Properties.ContainsKey("SourceContext"),enrichmentConfig=>enrichmentConfig.WithProperty("SourceContext","SourceContext"))
-    .Enrich.When(logEvent=>!logEvent.Properties.ContainsKey("ThreadName"),enrichmentConfig=>enrichmentConfig.WithProperty("ThreadName","ThreadName"))
-    .ReadFrom.Configuration(builder.Configuration)
-    .CreateLogger();
+    .AddDefaultLogConfig()
+    .CreateBootstrapLogger();
 
-Log.Information("启动中...");
+Log.Information("日志初始化完成,正在启动服务...");
 
 try
 {
-    builder.Host.UseSerilog();
+    builder.Host.UseSerilog((serviceProvider, loggerConfiguration) =>
+    {
+        loggerConfiguration.AddCustomLogConfig(builder.Configuration);
+    });
 
     builder.Services.AddControllers();
 
