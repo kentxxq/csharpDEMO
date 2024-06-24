@@ -14,6 +14,11 @@ try
     builder.Host.UseSerilog((serviceProvider, loggerConfiguration) =>
     {
         loggerConfiguration.AddCustomLogConfig(builder.Configuration);
+        var enableOpentelemetry = builder.Configuration.GetValue("EnableOpenTelemetry", false);
+        if (enableOpentelemetry)
+        {
+            loggerConfiguration.AddMyOpenTelemetry(builder.Configuration);
+        }
     });
 
     builder.Services.AddControllers();
