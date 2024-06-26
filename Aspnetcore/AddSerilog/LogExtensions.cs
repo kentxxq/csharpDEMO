@@ -10,7 +10,7 @@ namespace AddSerilog;
 public static class LogExtensions
 {
     public static readonly string DefaultLogTemplate =
-        "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}|{Level:u3}|{SourceContext}|{IP}|{MachineName}|{ThreadName}|{ThreadId}|{Message:lj}{Exception}{NewLine}";
+        "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}|{Level:u3}|{SourceContext}|{MachineIP}|{MachineName}|{ThreadName}|{ThreadId}|{Message:lj}{Exception}{NewLine}";
 
     private static LoggerConfiguration AddCommonConfig(this LoggerConfiguration loggerConfiguration)
     {
@@ -21,7 +21,7 @@ public static class LogExtensions
             .MinimumLevel.Override("System", LogEventLevel.Warning)
             .Enrich.WithProperty("AppName", ThisAssembly.Project.AssemblyName)
             .Enrich.WithMachineName()
-            .Enrich.WithProperty("IP",ip.ToString())
+            .Enrich.WithProperty("MachineIP",GetLocalIP().ToString())
             .Enrich.When(logEvent => !logEvent.Properties.ContainsKey("SourceContext"),
                 enrichmentConfig => enrichmentConfig.WithProperty("SourceContext", "SourceContext"))
             .Enrich.When(logEvent => !logEvent.Properties.ContainsKey("ThreadName"),
