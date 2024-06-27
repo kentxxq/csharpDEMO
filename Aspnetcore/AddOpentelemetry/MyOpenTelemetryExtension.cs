@@ -5,6 +5,7 @@ using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Pyroscope.OpenTelemetry;
 
 namespace AddOpenTelemetry;
 
@@ -28,11 +29,11 @@ public static class MyOpenTelemetryExtension
 
         // 统一配置名称,版本,连接地址
         var openTelemetryBuilder = builder.Services.AddOpenTelemetry()
-            .UseOtlpExporter(OtlpExportProtocol.Grpc,new Uri(_ocEndpoint))
+            .UseOtlpExporter(OtlpExportProtocol.Grpc, new Uri(_ocEndpoint))
             .ConfigureResource(resourceBuilder => resourceBuilder.AddService(AppName, serviceVersion: AppVersion));
 
-        // 日志
-        openTelemetryBuilder.WithLogging();
+        // 日志让serilog自己发送
+        // openTelemetryBuilder.WithLogging();
 
         // 指标
         openTelemetryBuilder
@@ -58,10 +59,10 @@ public static class MyOpenTelemetryExtension
                     o.RefreshIntervalSecs = 1;
                     // https://learn.microsoft.com/en-us/dotnet/core/diagnostics/available-counters
                     // o.AddEventSources("System.Runtime"); 有RuntimeInstrumentation和AspNetCoreInstrumentation就够了
-                    o.AddEventSources("Microsoft.AspNetCore.Hosting");
+                    // o.AddEventSources("Microsoft.AspNetCore.Hosting");
                     // o.AddEventSources("Microsoft.AspNetCore.Http.Connections"); 没看到输出
-                    o.AddEventSources("Microsoft-AspNetCore-Server-Kestrel");
-                    o.AddEventSources("System.Net.Http");
+                    // o.AddEventSources("Microsoft-AspNetCore-Server-Kestrel");
+                    // o.AddEventSources("System.Net.Http");
                     o.AddEventSources("System.Net.NameResolution");
                     // o.AddEventSources("System.Net.Security"); 主要是ssl信息，挂在代理后面不需要这个
                     o.AddEventSources("System.Net.Sockets");
@@ -70,22 +71,26 @@ public static class MyOpenTelemetryExtension
 
         // 链路追踪
         openTelemetryBuilder.WithTracing(tracerProviderBuilder =>
-            tracerProviderBuilder.AddAspNetCoreInstrumentation(o => { o.Filter = r => r.Request.Path != "/healthz"; })
-                .AddGrpcClientInstrumentation(o =>
-                {
-                    // grpc基于http,如果为true,那么http就可以检测到grpc的traceid,产生一些activity.所以默认false关掉它.
-                    o.SuppressDownstreamInstrumentation = false;
-                })
-                .AddHttpClientInstrumentation(o =>
-                {
-                    o.FilterHttpRequestMessage = r => r.RequestUri?.PathAndQuery != "/healthz";
-                })
-                .AddQuartzInstrumentation()
-                // 默认 ParentBased(root=AlwaysOn) 全部采集
-                // .SetSampler(new TraceIdRatioBasedSampler(0.1))  // 采集1/10的指标
-                // debug用
-                // .AddConsoleExporter()
-            );
+                tracerProviderBuilder.AddAspNetCoreInstrumentation(o =>
+                    {
+                        o.Filter = r => r.Request.Path != "/healthz";
+                    })
+                    .AddGrpcClientInstrumentation(o =>
+                    {
+                        // grpc基于http,如果为true,那么http就可以检测到grpc的traceid,产生一些activity.所以默认false关掉它.
+                        o.SuppressDownstreamInstrumentation = false;
+                    })
+                    .AddHttpClientInstrumentation(o =>
+                    {
+                        o.FilterHttpRequestMessage = r => r.RequestUri?.PathAndQuery != "/healthz";
+                    })
+                    .AddQuartzInstrumentation()
+                    .AddProcessor(new PyroscopeSpanProcessor())
+            // 默认 ParentBased(root=AlwaysOn) 全部采集
+            // .SetSampler(new TraceIdRatioBasedSampler(0.1))  // 采集1/10的指标
+            // debug用
+            // .AddConsoleExporter()
+        );
     }
 
     // private static void AddLogging(WebApplicationBuilder builder)
