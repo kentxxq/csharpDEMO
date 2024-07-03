@@ -65,7 +65,7 @@ public static class LogExtensions
     }
 
     public static LoggerConfiguration AddMyOpenTelemetry(this LoggerConfiguration loggerConfiguration,
-        IConfiguration configuration)
+        IConfiguration configuration,string instanceId)
     {
         return loggerConfiguration.WriteTo.OpenTelemetry(options =>
             {
@@ -73,6 +73,7 @@ public static class LogExtensions
                                    throw new InvalidOperationException("必须配置open telemetry的collector地址");
                 options.ResourceAttributes["service.name"] = ThisAssembly.Project.AssemblyName;
                 options.ResourceAttributes["job"] = ThisAssembly.Project.AssemblyName;
+                options.ResourceAttributes["service.instance.id"] = instanceId;
             }
         );
     }

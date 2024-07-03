@@ -7,7 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddUserSecrets(typeof(Program).Assembly);
 
 // 统一注入
-builder.AddMyOpenTelemetry();
+var instanceId = Guid.NewGuid().ToString();
+builder.AddMyOpenTelemetry(instanceId);
 
 builder.Services.AddControllers();
 builder.Services.AddSingleton<IDemoService, DemoService>();

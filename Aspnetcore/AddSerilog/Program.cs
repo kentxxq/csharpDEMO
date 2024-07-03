@@ -17,7 +17,8 @@ try
         var enableOpentelemetry = builder.Configuration.GetValue("EnableOpenTelemetry", false);
         if (enableOpentelemetry)
         {
-            loggerConfiguration.AddMyOpenTelemetry(builder.Configuration);
+            var instanceId = Guid.NewGuid().ToString();
+            loggerConfiguration.AddMyOpenTelemetry(builder.Configuration,instanceId);
         }
     });
 
