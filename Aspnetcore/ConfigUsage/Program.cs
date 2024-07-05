@@ -1,3 +1,4 @@
+using System.Text.Json;
 using ConfigUsage;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,12 +16,14 @@ var C2 = config.GetValue<string>("C2:C2-1", "C2-default");
 Console.WriteLine($"{C1},{C2}");
 // 对象配置
 builder.Services.Configure<PositionOptions>(
-    builder.Configuration.GetSection(PositionOptions.Position));
+    builder.Configuration.GetSection(nameof(PositionOptions)));
 // 命名取值.不常用,比如每周六8折,平时9折
 builder.Services.Configure<TopItemSettings>(TopItemSettings.Month,
     builder.Configuration.GetSection("TopItem:Month"));
 builder.Services.Configure<TopItemSettings>(TopItemSettings.Year,
     builder.Configuration.GetSection("TopItem:Year"));
+
+Console.WriteLine(JsonSerializer.Serialize(new TopItemSettings()));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
