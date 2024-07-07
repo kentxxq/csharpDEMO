@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Text;
 using NetTools;
 using SharpPcap;
 using SharpPcap.LibPcap;
@@ -199,6 +200,24 @@ public static class StaticNetTool
     }
 
     /// <summary>
+    /// ping测试 // 这里和connection.myping里面一致
+    /// </summary>
+    /// <param name="ip"></param>
+    /// <param name="ttl">最大跳转数</param>
+    /// <param name="timeout">超时时间(毫秒)</param>
+    /// <returns></returns>
+    public static bool PingIp(IPAddress ip,int ttl=255,int timeout=1000)
+    {
+        var pingSender = new Ping();
+        // 32字节数据
+        const string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        var buffer = Encoding.ASCII.GetBytes(data);
+        var pingOption = new PingOptions(ttl, true);
+        var reply = pingSender.Send(ip, timeout, buffer, pingOption);
+        return reply.Status == IPStatus.Success;
+    }
+
+    /// <summary>
     /// 拿到当前内网可以ping通的存活主机
     /// </summary>
     /// <returns></returns>
@@ -209,7 +228,7 @@ public static class StaticNetTool
         var taskList = new List<Task<bool>>();
         foreach (var ip in ips)
         {
-            taskList.Add(Task.Run(() => MyPing.StaticPing.PingIp(ip)));
+            taskList.Add(Task.Run(() => PingIp(ip)));
         }
 
         Task.WhenAll(taskList.ToArray()).GetAwaiter().GetResult();
