@@ -9,12 +9,10 @@ namespace AddSerilog;
 
 public static class LogExtensions
 {
-    public static readonly string DefaultLogTemplate =
-        "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}|{Level:u3}|{SourceContext}|{MachineIP}|{MachineName}|{ThreadName}|{ThreadId}|{Message:lj}{Exception}{NewLine}";
+    private const string DefaultLogTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}|{Level:u3}|{SourceContext}|{MachineIP}|{MachineName}|{ThreadName}|{ThreadId}|{Message:lj}{Exception}{NewLine}";
 
     private static LoggerConfiguration AddCommonConfig(this LoggerConfiguration loggerConfiguration)
     {
-        var ip = GetLocalIP();
         return loggerConfiguration
             .MinimumLevel.Is(LogEventLevel.Information)
             .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
@@ -65,7 +63,7 @@ public static class LogExtensions
     }
 
     public static LoggerConfiguration AddMyOpenTelemetry(this LoggerConfiguration loggerConfiguration,
-        IConfiguration configuration,string instanceId)
+        IConfiguration configuration, string instanceId)
     {
         return loggerConfiguration.WriteTo.OpenTelemetry(options =>
             {
