@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -21,6 +22,13 @@ public class ConfigController : ControllerBase
         _configuration = configuration;
         _options = options;
         _optionsMonitor = optionsMonitor;
+
+        // onChange需要被调用一次,才能开启检测. 比如说在controller里,要被请求一次才能监测输出改动. 同样如果在service里,就是要被实例化一次
+        // config是现在最新的值, 而name是用来命名区分的,可以省略成(config)=>{}. TopItemSettings在配置的时候,使用了key做区分不同config实例,这里name就是key
+        _optionsMonitor.OnChange((config, name) =>
+        {
+            _logger.LogWarning($"{JsonSerializer.Serialize(config)},{name}");
+        });
     }
 
     [HttpGet]
