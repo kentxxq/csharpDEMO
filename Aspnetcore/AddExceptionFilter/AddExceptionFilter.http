@@ -1,0 +1,6 @@
+@AddExceptionFilter_HostAddress = http://localhost:5211
+
+GET {{AddExceptionFilter_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
