@@ -38,6 +38,11 @@ public static class LogExtensions
                 formatter: MyJsonFormatter.Formatter,
                 rollingInterval: RollingInterval.Day,
                 retainedFileCountLimit: 1))
+            .WriteTo.Async(l => l.File(
+                path: $"stdout-{ThisAssembly.Project.AssemblyName}-.log",
+                outputTemplate:DefaultLogTemplate,
+                rollingInterval: RollingInterval.Day,
+                retainedFileCountLimit: 1))
             .WriteTo.Async(l =>
                 l.Console(
                     outputTemplate:DefaultLogTemplate,
@@ -55,6 +60,11 @@ public static class LogExtensions
                 rollingInterval: RollingInterval.Day,
                 retainedFileCountLimit: configuration.GetValue("KLog:File:RetainedFileCountLimit", 1))
             )
+            .WriteTo.Async(l => l.File(
+                path: $"stdout-{ThisAssembly.Project.AssemblyName}-.log",
+                outputTemplate:DefaultLogTemplate,
+                rollingInterval: RollingInterval.Day,
+                retainedFileCountLimit: 1))
             .WriteTo.Async(l =>
                 l.Console(
                     outputTemplate: configuration["KLog:Console:OutputTemplate"] ??DefaultLogTemplate,
