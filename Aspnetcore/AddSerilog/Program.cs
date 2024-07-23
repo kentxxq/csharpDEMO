@@ -5,6 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 var instanceId = Guid.NewGuid().ToString();
 
+
+// 在var app = builder.Build(); 后使用Log.Information,避免依赖没有注入的情况
 // 不建议使用CreateBootstrapLogger. 有时候会导致没有log,也和senparc.weixin的冲突...
 // 问题: https://github.com/serilog/serilog-sinks-file/issues/220  https://github.com/JeffreySu/WeiXinMPSDK/issues/3047
 // Log.Logger = new LoggerConfiguration()
