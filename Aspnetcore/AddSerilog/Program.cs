@@ -5,15 +5,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 var instanceId = Guid.NewGuid().ToString();
 
-// web服务启动不应该依赖其他内容, 所以应该在
-
-// 不建议使用CreateBootstrapLogger. 有时候会导致没有log,也和senparc.weixin冲突...
-// 这有问题 https://github.com/serilog/serilog-sinks-file/issues/220
+// 不建议使用CreateBootstrapLogger. 有时候会导致没有log,也和senparc.weixin的冲突...
+// 问题: https://github.com/serilog/serilog-sinks-file/issues/220  https://github.com/JeffreySu/WeiXinMPSDK/issues/3047
 // Log.Logger = new LoggerConfiguration()
 //     .AddDefaultLogConfig()
 //     .CreateBootstrapLogger();
-
-Log.Information("日志初始化完成,正在启动服务...");
+// Log.Information("日志初始化完成,正在启动服务...");
 
 try
 {
