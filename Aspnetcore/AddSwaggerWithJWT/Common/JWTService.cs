@@ -32,6 +32,6 @@ public class JWTService
             .SingleOrDefault(key => key["Issuer"] == issuer);
         if (signingKey?["Value"] is { } keyValue) secret = keyValue;
 
-        return JwtTool.CreateTokenString(uid, username, secret, DateTime.Now.AddHours(3));
+        return JwtTool.CreateTokenString(uid, username, secret, DateTimeOffset.Now.AddHours(3));
     }
 }

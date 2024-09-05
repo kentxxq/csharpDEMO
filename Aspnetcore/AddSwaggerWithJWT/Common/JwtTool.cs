@@ -18,7 +18,7 @@ public static class JwtTool
     /// <param name="schemaName">验证方案名称，默认Bearer</param>
     /// <param name="secret">密码</param>
     /// <returns></returns>
-    public static string CreateTokenString(int uid, string username, string secret, DateTime expires,
+    public static string CreateTokenString(int uid, string username, string secret, DateTimeOffset expires,
         string issuer = "ken", string schemaName = "Bearer")
     {
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -34,11 +34,11 @@ public static class JwtTool
             // 受众。签证机构把认证给了ken
             Audience = issuer,
             // 签发时间
-            IssuedAt = DateTime.Now,
+            IssuedAt = DateTimeOffset.Now.UtcDateTime,
             // 在这之前不可用.作用是1点签发token，允许2点开始生效，生效1小时到3点
-            NotBefore = DateTime.Now,
+            NotBefore = DateTimeOffset.Now.UtcDateTime,
             // 什么时候过期
-            Expires = expires,
+            Expires = expires.UtcDateTime,
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Convert.FromBase64String(secret)),
                 SecurityAlgorithms.HmacSha256Signature)
         };
@@ -87,8 +87,8 @@ public static class JwtTool
         var jwt = ParseJWTStringToJwtSecurityToken(jwtString);
         var tokenExp = jwt.Claims.First(c => c.Type == "exp").Value;
         var exp = long.Parse(tokenExp);
-        var expDateTime = DateTimeOffset.FromUnixTimeSeconds(exp);
-        return (int)(expDateTime - DateTimeOffset.Now).TotalSeconds;
+        var expDateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(exp);
+        return (int)(expDateTimeOffset - DateTimeOffset.Now).TotalSeconds;
     }
 
     /// <summary>
@@ -101,7 +101,7 @@ public static class JwtTool
         var expClaim = authenticationState.User.Claims.FirstOrDefault(c => c.Type == "exp");
         if (expClaim is null) return -1;
         var exp = long.Parse(expClaim.Value);
-        var expDateTime = DateTimeOffset.FromUnixTimeSeconds(exp);
-        return (int)(expDateTime - DateTimeOffset.Now).TotalSeconds;
+        var expDateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(exp);
+        return (int)(expDateTimeOffset - DateTimeOffset.Now).TotalSeconds;
     }
 }
