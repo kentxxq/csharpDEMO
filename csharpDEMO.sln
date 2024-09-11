@@ -146,6 +146,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cli", "Cli", "{08095319-2C6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppDemo", "PackageUsage\Cli\ConsoleAppDemo\ConsoleAppDemo.csproj", "{BA252DFC-90CA-44C7-BD22-DFA96E866157}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAOT", "PackageUsage\Cli\ConsoleAOT\ConsoleAOT.csproj", "{A71FE9C2-8624-4102-A808-3B3615DC2C37}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -350,6 +352,10 @@ Global
 		{BA252DFC-90CA-44C7-BD22-DFA96E866157}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA252DFC-90CA-44C7-BD22-DFA96E866157}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA252DFC-90CA-44C7-BD22-DFA96E866157}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A71FE9C2-8624-4102-A808-3B3615DC2C37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A71FE9C2-8624-4102-A808-3B3615DC2C37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A71FE9C2-8624-4102-A808-3B3615DC2C37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A71FE9C2-8624-4102-A808-3B3615DC2C37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -418,6 +424,7 @@ Global
 		{57760040-EE30-4C42-9FDD-D4F50C171350} = {00E2EEFE-8CB2-4052-8052-A4FF3B65435F}
 		{08095319-2C6A-40D7-BE2B-09704921BFDB} = {51AA4297-6C5C-47B9-8351-0D68BD6F0F9D}
 		{BA252DFC-90CA-44C7-BD22-DFA96E866157} = {08095319-2C6A-40D7-BE2B-09704921BFDB}
+		{A71FE9C2-8624-4102-A808-3B3615DC2C37} = {08095319-2C6A-40D7-BE2B-09704921BFDB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {17E3A482-A978-4118-A3A5-E18D1F795F9E}
