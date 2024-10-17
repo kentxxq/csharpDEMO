@@ -13,12 +13,25 @@ namespace DockerDistribution;
 /// </summary>
 public class DockerClient
 {
-    private readonly HttpClient _httpClient = new();
-    private readonly  string _registryUrl;
+    private readonly HttpClient _httpClient;
+    private readonly string _registryUrl;
 
-    public DockerClient(string registryUrl = "https://registry-1.docker.io", string username = "", string password = "")
+    public DockerClient(string registryUrl = "https://registry-1.docker.io", string username = "", string password = "",string httpProxy="")
     {
         _registryUrl = registryUrl;
+        if (string.IsNullOrEmpty(httpProxy))
+        {
+            _httpClient = new HttpClient();
+        }
+        else
+        {
+            var handler = new HttpClientHandler
+            {
+                Proxy = StaticTools.GetWebproxyFromString(httpProxy),
+                UseProxy = true
+            };
+            _httpClient =  new HttpClient(handler);
+        }
         // _httpClient.DefaultRequestHeaders.Authorizat0ion = new AuthenticationHeaderValue("Basic", CreateBasicAuthHeader(username, password));
     }
 
