@@ -7,6 +7,10 @@ using DockerDistribution.Models;
 
 namespace DockerDistribution;
 
+/// <summary>
+/// 文档地址 https://distribution.github.io/distribution/spec/manifest-v2-2/
+/// http文档地址 https://distribution.github.io/distribution/spec/api/
+/// </summary>
 public class DockerClient
 {
     private readonly HttpClient _httpClient = new();
@@ -26,6 +30,13 @@ public class DockerClient
     //     return base64Credentials;
     // }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="imageName">nginx</param>
+    /// <param name="tag">1.21.1</param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     public async Task<ManifestList> GetManifestList(string imageName,string tag)
     {
         var manifestListUrl = $"{_registryUrl}/v2/{imageName}/manifests/{tag}";
@@ -43,6 +54,13 @@ public class DockerClient
         return dockerManifestList;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="imageName">nginx</param>
+    /// <param name="digest">sha256:123456</param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     public async Task<DockerManifest> GetManifest(string imageName,string digest)
     {
         var manifestUrl = $"{_registryUrl}/v2/{imageName}/manifests/{digest}";
@@ -60,6 +78,13 @@ public class DockerClient
         return manifest;
     }
 
+    /// <summary>
+    /// 下载到当前目录,并校验sha256的值
+    /// </summary>
+    /// <param name="image">nginx</param>
+    /// <param name="manifest"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     public async Task<bool> DownloadImage(string image,DockerManifest manifest)
     {
         foreach (var layer in manifest.Layers)
