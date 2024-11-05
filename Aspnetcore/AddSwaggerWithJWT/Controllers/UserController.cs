@@ -29,10 +29,10 @@ public class UserController : ControllerBase
     {
         if (loginRO.Username != "admin" || loginRO.Password != "123456")
         {
-            return ResultModel<LoginSO>.Error("登录失败", new LoginSO());
+            return ResultModel.Error("登录失败", new LoginSO());
         }
 
         var token = _jwtService.GetToken(1, "admin");
-        return ResultModel<LoginSO>.Ok(new LoginSO { Token = token });
+        return ResultModel.Ok(new LoginSO { Token = token });
     }
 }

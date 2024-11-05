@@ -46,6 +46,6 @@ public class WeatherForecastController : ControllerBase
     public ResultModel<string> GetToken(int uid, string username)
     {
         var token = _jwtService.GetToken(uid, username);
-        return ResultModel<string>.Ok(token);
+        return ResultModel.Ok(token);
     }
 }
