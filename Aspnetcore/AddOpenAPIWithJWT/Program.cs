@@ -1,10 +1,12 @@
 using AddSwaggerWithJWT;
 using AddSwaggerWithJWT.Common;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
+builder.Services.AddOpenApi();
 
 
 builder.Services.AddSingleton<JWTService>();
@@ -62,6 +64,14 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    // openapi
+    app.MapOpenApi();
+
+    // scalar
+    // https://github.com/dotnet/aspnetcore/issues/57332 去掉servers内容,scalar就会根据域名自适应base url
+    app.MapScalarApiReference(options => options.Servers = []);
+
+    // swagger
     app.UseSwagger(options =>
     {
         options.SerializeAsV2 = true;
@@ -69,9 +79,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(u =>
     {
         // 拦截 /swagger/v1/swagger.json 到 SwaggerDoc的v1
-        u.SwaggerEndpoint($"/swagger/v1/swagger.json", "v1");
+        u.SwaggerEndpoint($"/openapi/v1.json", "v1");
         // 右上角会有2个选项
-        u.SwaggerEndpoint($"/swagger/v2/swagger.json", "v2");
+        u.SwaggerEndpoint($"/openapi/v2.json", "v2");
     });
 }
 

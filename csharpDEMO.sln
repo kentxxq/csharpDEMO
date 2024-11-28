@@ -88,7 +88,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddOpentelemetry", "Aspnetc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddHealthChecks", "Aspnetcore\AddHealthChecks\AddHealthChecks.csproj", "{667402A0-E364-4B88-98E7-7924B4C046EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddSwaggerWithJWT", "Aspnetcore\AddSwaggerWithJWT\AddSwaggerWithJWT.csproj", "{CABD61BB-A321-49C6-A929-76E4AEE718AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddOpenAPIWithJWT", "Aspnetcore\AddOpenAPIWithJWT\AddOpenAPIWithJWT.csproj", "{CABD61BB-A321-49C6-A929-76E4AEE718AB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddPathBaseWithAll", "Aspnetcore\AddPathBaseWithAll\AddPathBaseWithAll.csproj", "{F2AB52E1-84DE-4B33-85F3-A5FE092B028B}"
 EndProject
