@@ -72,6 +72,9 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference(options => options.Servers = []);
 
     // swagger
+    // controller 注入 ISwaggerProvider 即可在controller获取到注解元数据
+    // var swaggerDoc = _swaggerProvider.GetSwagger("v1");
+    // var data = swaggerDoc.Paths.ToDictionary(path => path.Key, path => path.Value.Operations.First().Value.Summary);
     app.UseSwagger(options =>
     {
         options.SerializeAsV2 = true;
