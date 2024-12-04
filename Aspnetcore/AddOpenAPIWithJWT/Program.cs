@@ -15,8 +15,7 @@ builder.Services.AddOpenApi(options =>
 builder.Services.AddSingleton<JWTService>();
 // builder.Services.AddMySwagger();
 
-builder.Services.AddAuthentication("Bearer").AddJwtBearer();
-// builder.Services.AddMyJWT();
+builder.Services.AddMyJWT();
 
 
 var app = builder.Build();

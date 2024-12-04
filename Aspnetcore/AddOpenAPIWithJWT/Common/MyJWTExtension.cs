@@ -17,31 +17,33 @@ public static class MyJWTExtension
     /// <returns></returns>
     public static IServiceCollection AddMyJWT(this IServiceCollection service)
     {
-        service.AddAuthentication(x =>
-            {
-                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            }) // 这里是设置默认认证方案。controller没有配置方案的时候，使用Bearer认证
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateLifetime = true,
-
-                    ValidIssuer = "ken",
-                    ValidateIssuer = true,
-
-                    ValidAudience = "ken",
-                    ValidateAudience = true,
-
-
-                    ValidateIssuerSigningKey = false,
-                    // SignatureValidator = (token, _) => new JsonWebToken(token),
-                    RequireSignedTokens = false,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("asdasdasdadadssaaasdasaaasdasaaa"))
-                };
-            }); // 这里是添加认证方案
+        service
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            // .AddAuthentication(x =>
+            // {
+            //     x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            //     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            // }) // 这里是设置默认认证方案。controller没有配置方案的时候，使用Bearer认证
+            .AddJwtBearer();
+            // .AddJwtBearer(options =>
+            // {
+            //     options.TokenValidationParameters = new TokenValidationParameters
+            //     {
+            //         ValidateLifetime = true,
+            //
+            //         ValidIssuer = "ken",
+            //         ValidateIssuer = true,
+            //
+            //         ValidAudience = "ken",
+            //         ValidateAudience = true,
+            //
+            //         ValidateIssuerSigningKey = false,
+            //         // SignatureValidator = (token, _) => new JsonWebToken(token),
+            //         RequireSignedTokens = false,
+            //         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("asdasdasdadadssaaasdasaaasdasaaa"))
+            //     };
+            // });
             // .AddJwtBearer("Test"); // 这里是添加认证方案更多的方案，在json配置中设置
 
         service.AddAuthorization(options =>
