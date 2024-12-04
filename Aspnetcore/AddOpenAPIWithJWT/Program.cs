@@ -1,17 +1,22 @@
-using AddSwaggerWithJWT;
-using AddSwaggerWithJWT.Common;
+using AddOpenAPIWithJWT;
+using AddOpenAPIWithJWT.Common;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+});
 
 
 builder.Services.AddSingleton<JWTService>();
-builder.Services.AddMySwagger()
-    .AddMyJWT();
+// builder.Services.AddMySwagger();
+
+builder.Services.AddAuthentication("Bearer").AddJwtBearer();
+// builder.Services.AddMyJWT();
 
 
 var app = builder.Build();
@@ -69,23 +74,41 @@ if (app.Environment.IsDevelopment())
 
     // scalar
     // https://github.com/dotnet/aspnetcore/issues/57332 去掉servers内容,scalar就会根据域名自适应base url
-    app.MapScalarApiReference(options => options.Servers = []);
+    app.MapScalarApiReference(options =>
+    {
+        options.Servers = [];
+
+        // Basic
+        options
+            .WithPreferredScheme("Basic") // Security scheme name from the OpenAPI document
+            .WithHttpBasicAuthentication(basic =>
+            {
+                basic.Username = "your-username";
+                basic.Password = "your-password";
+            });
+
+        options.WithPreferredScheme("Bearer")
+            .WithHttpBearerAuthentication(bearer =>
+            {
+                bearer.Token = "your-bearer-token";
+            });
+    });
 
     // swagger
     // controller 注入 ISwaggerProvider 即可在controller获取到注解元数据
     // var swaggerDoc = _swaggerProvider.GetSwagger("v1");
     // var data = swaggerDoc.Paths.ToDictionary(path => path.Key, path => path.Value.Operations.First().Value.Summary);
-    app.UseSwagger(options =>
-    {
-        options.SerializeAsV2 = true;
-    });
-    app.UseSwaggerUI(u =>
-    {
-        // 拦截 /swagger/v1/swagger.json 到 SwaggerDoc的v1
-        u.SwaggerEndpoint($"/openapi/v1.json", "v1");
-        // 右上角会有2个选项
-        u.SwaggerEndpoint($"/openapi/v2.json", "v2");
-    });
+    // app.UseSwagger(options =>
+    // {
+    //     options.SerializeAsV2 = true;
+    // });
+    // app.UseSwaggerUI(u =>
+    // {
+    //     // 拦截 /swagger/v1/swagger.json 到 SwaggerDoc的v1
+    //     u.SwaggerEndpoint($"/openapi/v1.json", "v1");
+    //     // 右上角会有2个选项
+    //     u.SwaggerEndpoint($"/openapi/v2.json", "v2");
+    // });
 }
 
 // 加上一个前缀
@@ -97,6 +120,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // 全局添加需要验证
-app.MapControllers().RequireAuthorization();
+app.MapControllers();
 
 app.Run();

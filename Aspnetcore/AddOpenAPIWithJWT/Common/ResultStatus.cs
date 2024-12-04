@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using NetEscapades.EnumGenerators;
 
-namespace AddSwaggerWithJWT.Common;
+namespace AddOpenAPIWithJWT.Common;
 
 /// <summary>
 /// 统一返回模型的枚举code

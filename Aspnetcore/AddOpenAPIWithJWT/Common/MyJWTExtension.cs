@@ -1,4 +1,9 @@
-﻿namespace AddSwaggerWithJWT.Common;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
+
+namespace AddOpenAPIWithJWT.Common;
 
 /// <summary>
 /// jwt配置-拓展方法
@@ -12,9 +17,32 @@ public static class MyJWTExtension
     /// <returns></returns>
     public static IServiceCollection AddMyJWT(this IServiceCollection service)
     {
-        service.AddAuthentication("Bearer") // 这里是设置默认认证方案。controller没有配置方案的时候，使用Bearer认证
-            .AddJwtBearer() // 这里是添加认证方案。等同于AddJwtBearer("Bearer")
-            .AddJwtBearer("Test"); // 这里是添加认证方案更多的方案，在json配置中设置
+        service.AddAuthentication(x =>
+            {
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            }) // 这里是设置默认认证方案。controller没有配置方案的时候，使用Bearer认证
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateLifetime = true,
+
+                    ValidIssuer = "ken",
+                    ValidateIssuer = true,
+
+                    ValidAudience = "ken",
+                    ValidateAudience = true,
+
+
+                    ValidateIssuerSigningKey = false,
+                    // SignatureValidator = (token, _) => new JsonWebToken(token),
+                    RequireSignedTokens = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("asdasdasdadadssaaasdasaaasdasaaa"))
+                };
+            }); // 这里是添加认证方案
+            // .AddJwtBearer("Test"); // 这里是添加认证方案更多的方案，在json配置中设置
 
         service.AddAuthorization(options =>
         {

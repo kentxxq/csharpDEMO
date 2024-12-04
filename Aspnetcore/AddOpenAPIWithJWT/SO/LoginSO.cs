@@ -1,4 +1,4 @@
-namespace AddSwaggerWithJWT.SO;
+namespace AddOpenAPIWithJWT.SO;
 
 public class LoginSO
 {

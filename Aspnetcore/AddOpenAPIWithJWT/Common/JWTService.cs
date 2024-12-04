@@ -1,4 +1,6 @@
-﻿namespace AddSwaggerWithJWT.Common;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+
+namespace AddOpenAPIWithJWT.Common;
 
 /// <summary>
 /// JWT工具
@@ -23,15 +25,15 @@ public class JWTService
     /// <param name="username">用户名</param>
     /// <param name="schemaName">验证方案名称，默认Bearer</param>
     /// <returns></returns>
-    public string GetToken(int uid, string username, string schemaName = "Bearer")
+    public string GetToken(int uid, string username, string schemaName = JwtBearerDefaults.AuthenticationScheme)
     {
-        var secret = "";
-        var issuer = _configuration.GetValue<string>($"Authentication:Schemes:{schemaName}:ValidIssuer");
+        var issuer = _configuration.GetValue<string>($"Authentication:Schemes:{schemaName}:ValidIssuer") ?? string.Empty;
         var signingKey = _configuration.GetSection($"Authentication:Schemes:{schemaName}:SigningKeys")
             .GetChildren()
             .SingleOrDefault(key => key["Issuer"] == issuer);
+        var secret = string.Empty;
         if (signingKey?["Value"] is { } keyValue) secret = keyValue;
 
-        return JwtTool.CreateTokenString(uid, username, secret, DateTimeOffset.Now.AddHours(3));
+        return JwtTool.CreateTokenString(uid, username, secret, DateTimeOffset.Now.AddHours(3),issuer);
     }
 }

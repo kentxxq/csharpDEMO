@@ -1,5 +1,5 @@
 ﻿using SqlSugar;
-namespace AddSwaggerWithJWT.Common;
+namespace AddOpenAPIWithJWT.Common;
 
 public static class ResultModel
 {

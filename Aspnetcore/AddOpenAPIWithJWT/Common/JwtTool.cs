@@ -1,10 +1,11 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using IdentityModel;
+﻿using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
-namespace AddSwaggerWithJWT.Common;
+namespace AddOpenAPIWithJWT.Common;
 
 public static class JwtTool
 {
@@ -19,15 +20,14 @@ public static class JwtTool
     /// <param name="secret">密码</param>
     /// <returns></returns>
     public static string CreateTokenString(int uid, string username, string secret, DateTimeOffset expires,
-        string issuer = "ken", string schemaName = "Bearer")
+        string issuer, string schemaName = JwtBearerDefaults.AuthenticationScheme)
     {
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Claims = new Dictionary<string, object>
             {
-                { JwtClaimTypes.Subject, schemaName },
-                { JwtClaimTypes.Id, uid },
-                { JwtClaimTypes.NickName, username }
+                {JwtRegisteredClaimNames.Sub,uid},
+                {JwtRegisteredClaimNames.Nickname,username}
             },
             // 签证机构的名称
             Issuer = issuer,
@@ -39,31 +39,16 @@ public static class JwtTool
             NotBefore = DateTimeOffset.Now.UtcDateTime,
             // 什么时候过期
             Expires = expires.UtcDateTime,
+            // 使用HmacSha256 https://stackoverflow.com/questions/74588231/asp-net-core-jwt-whatt-the-difference-between-hmacsha512-and-hmacsha512signat
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Convert.FromBase64String(secret)),
-                SecurityAlgorithms.HmacSha256Signature)
+                SecurityAlgorithms.HmacSha256)
         };
 
-        var tokenHandler = new JwtSecurityTokenHandler();
+        var tokenHandler = new JsonWebTokenHandler();
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
 
-        var stringToken = tokenHandler.WriteToken(token);
-
-        return stringToken;
-    }
-
-    /// <summary>
-    /// 字符串转jwt对象
-    /// </summary>
-    /// <param name="jwtString"></param>
-    /// <returns></returns>
-    /// <exception cref="ApplicationException"></exception>
-    public static JwtSecurityToken ParseJWTStringToJwtSecurityToken(string jwtString)
-    {
-        var handler = new JwtSecurityTokenHandler();
-        var jwt = handler.ReadToken(jwtString) as JwtSecurityToken;
-        if (jwt is null) throw new ApplicationException("token解析失败！");
-        return jwt;
+        return token;
     }
 
     /// <summary>
@@ -73,7 +58,7 @@ public static class JwtTool
     /// <returns></returns>
     public static AuthenticationState ParseJWTStringToAuthenticationState(string jwtString)
     {
-        var jwt = ParseJWTStringToJwtSecurityToken(jwtString);
+        var jwt = new JsonWebTokenHandler().ReadJsonWebToken(jwtString);
         return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(jwt.Claims, "jwt")));
     }
 
@@ -84,7 +69,7 @@ public static class JwtTool
     /// <returns></returns>
     public static int GetExpSecondsFromToken(string jwtString)
     {
-        var jwt = ParseJWTStringToJwtSecurityToken(jwtString);
+        var jwt = new JsonWebTokenHandler().ReadJsonWebToken(jwtString);
         var tokenExp = jwt.Claims.First(c => c.Type == "exp").Value;
         var exp = long.Parse(tokenExp);
         var expDateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(exp);

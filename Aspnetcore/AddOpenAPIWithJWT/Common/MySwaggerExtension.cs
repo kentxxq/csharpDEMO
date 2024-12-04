@@ -1,6 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
 
-namespace AddSwaggerWithJWT.Common;
+namespace AddOpenAPIWithJWT.Common;
 
 /// <summary>
 /// swagger-拓展方法
