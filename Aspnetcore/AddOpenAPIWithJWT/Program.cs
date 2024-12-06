@@ -77,6 +77,7 @@ if (app.Environment.IsDevelopment())
     {
         options.Servers = [];
 
+        // 必须配置2个才能让WithHttpBearerAuthentication生效 https://github.com/scalar/scalar/issues/3927
         // Basic
         options
             .WithPreferredScheme("Basic") // Security scheme name from the OpenAPI document
