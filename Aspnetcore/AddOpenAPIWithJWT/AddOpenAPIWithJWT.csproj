@@ -1,9 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
     <DocumentationFile>bin\Debug\MyApi.xml</DocumentationFile>
     <RootNamespace>AddOpenAPIWithJWT</RootNamespace>
     <UserSecretsId>4bb7aa15-880f-4f27-9dea-e4ea2df1d662</UserSecretsId>

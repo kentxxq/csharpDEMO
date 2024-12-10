@@ -10,3 +10,8 @@
 // https://www.hanselman.com/blog/how-do-i-find-which-directory-my-net-core-console-application-was-started-in-or-is-running-from
 Console.WriteLine($"当前路径:{AppContext.BaseDirectory}");
 
+
+
+
+// 输出版本号
+Console.WriteLine($"dotnet version: {Environment.Version}");
