@@ -1,4 +1,5 @@
 ﻿using AddSqlSugar.Models;
+using AddSqlSugar.Models.DB;
 using Microsoft.Data.Sqlite;
 using SqlSugar;
 
@@ -20,10 +21,10 @@ public static class Init
         var db = new SqlSugarClient(new ConnectionConfig
         {
             ConnectionString = connectionString,
-            DbType = dbType, 
+            DbType = dbType,
             IsAutoCloseConnection = true
         });
-        
+
         // 即使sqlite文件不存在，CheckConnection也会检查通过
         // 所以单独处理
         if (dbType == DbType.Sqlite)
@@ -58,7 +59,7 @@ public static class Init
                 InitTableData(db);
             }
         }
-        
+
     }
 
     private static void CreateDatabase(ISqlSugarClient db)

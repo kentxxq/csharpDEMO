@@ -1,4 +1,5 @@
 using AddSqlSugar.Models;
+using AddSqlSugar.Models.DB;
 using Microsoft.Data.Sqlite;
 using pusher.webapi.Service.Database;
 using SqlSugar;

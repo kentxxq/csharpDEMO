@@ -1,6 +1,7 @@
 ﻿
 using AddSqlSugar;
 using AddSqlSugar.Models;
+using AddSqlSugar.Models.DB;
 using SqlSugar;
 
 namespace kentxxq.Templates.Aspnetcore.Webapi.Services.UserInfo
