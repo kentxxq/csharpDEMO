@@ -9,6 +9,7 @@ namespace AddSerilog;
 
 public static class LogExtensions
 {
+    public const string OpenTelemetryConfigName = "EnableOpenTelemetry";
     private const string DefaultLogTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}|{Level:u3}|{SourceContext}|{MachineIP}|{MachineName}|{ThreadName}|{ThreadId}|{Message:lj}{Exception}{NewLine}";
 
     private static LoggerConfiguration AddCommonConfig(this LoggerConfiguration loggerConfiguration)

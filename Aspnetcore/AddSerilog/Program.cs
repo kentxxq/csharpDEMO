@@ -12,7 +12,7 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 var instanceId = Guid.NewGuid().ToString();
-var enableOpentelemetry = builder.Configuration.GetValue("EnableOpenTelemetry", false);
+var enableOpentelemetry = builder.Configuration.GetValue(LogExtensions.OpenTelemetryConfigName, false);
 // AddMyOpenTelemetry必须一起使用
 // if (enableOpentelemetry)
 // {
