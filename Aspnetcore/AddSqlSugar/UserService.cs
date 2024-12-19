@@ -6,7 +6,7 @@ using SqlSugar;
 namespace kentxxq.Templates.Aspnetcore.Webapi.Services.UserInfo
 {
     /// <inheritdoc />
-    public class UserService : IUserService
+    public class UserService
     {
         private readonly ISqlSugarClient _sqlSugarClient;
 

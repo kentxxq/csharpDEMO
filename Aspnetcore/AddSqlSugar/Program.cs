@@ -12,7 +12,7 @@ builder.Services.AddSwaggerGen();
 Init.InitDatabase(builder.Configuration);
 // 数据库
 builder.AddSqlsugarSetup();
-builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<UserService>();
 
 
 
