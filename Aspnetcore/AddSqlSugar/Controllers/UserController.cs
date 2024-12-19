@@ -1,5 +1,6 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using kentxxq.Templates.Aspnetcore.Webapi.Services.UserInfo;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AddSqlSugar.Controllers;
@@ -8,9 +9,9 @@ namespace AddSqlSugar.Controllers;
 [Route("api/[controller]/[action]")]
 public class UserController : ControllerBase
 {
-    private readonly IUserService _userService;
+    private readonly UserService _userService;
 
-    public UserController(IUserService userService)
+    public UserController(UserService userService)
     {
         _userService = userService;
     }
